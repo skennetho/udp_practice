@@ -16,6 +16,21 @@ int main(void){
     int addr_len;
     const char *msg = "hello awesometech!";
 
+    //drone data
+    int length;
+    char company_definition[8];
+    char drone_definition[8];
+    double latitude;
+    double longitude;
+    double altitude;
+    char time_stamp[12];
+    int state;
+    int mission_type;
+    int mission_detail;
+    int empty[52];
+
+
+
     if((sock = socket(AF_INET , SOCK_DGRAM, 0))<0){
         perror("socket");
         return 1;
@@ -43,5 +58,4 @@ int main(void){
     close(sock);
 
     return 0;
-
 }

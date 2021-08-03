@@ -1,11 +1,12 @@
 #include<iostream>
 #include<algorithm>
+#include "droneMessage.h"
 
 int CharsToInt(unsigned char* charBytes);
 unsigned char* IntToChars(int number);
 void testIntAndCharsConverter(double number);
-double CharsToDouble(unsigned char* charBytes);
 unsigned char* DoubleToChars(double number);
+double CharsToDouble(unsigned char* charBytes);
 
 int main(int args, char **argv)
 {
@@ -16,12 +17,26 @@ int main(int args, char **argv)
     //     return 1;
     // } 
     
-    int a = 1452345;
-    int *ptr;
-    ptr = reinterpret_cast<int*> (a);
-    // printf("%d, %d\n", a, *ptr);
-    // printf("%d, %d\n", &a, ptr);
-    
+    char* str = "AWESOME ";
+    unsigned char* bytes =CharsToUnsignedChars(str);
+    char* result = UnsignedCharsToChars(bytes);
+
+    printf("%s \n", str);
+    printf("%s \n", result);
+
+    int int1 = 231;
+    unsigned char* bytes1 =IntToChars(int1);
+    int result1 = CharsToInt(bytes1);
+
+    printf("%d \n", int1);
+    printf("%d \n", result1);
+
+    double double1 = 16.123456;
+    unsigned char* bytes2 =DoubleToChars(double1);
+    double result2 = CharsToDouble(bytes2);
+
+    printf("%lf \n", double1);
+    printf("%lf \n", result2);
 
     return 0;
 }
@@ -37,10 +52,10 @@ void testIntAndCharsConverter(int number)
 }
 
 
-unsigned char* DoubleToChars(double number)
+unsigned char *DoubleToChars(double number)
 {
     unsigned char* charBytes = reinterpret_cast<unsigned char*>(&number);
-    return charBytes;
+    return &charBytes[0];
 }
 
 double CharsToDouble(unsigned char* charBytes)
