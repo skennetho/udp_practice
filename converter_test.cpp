@@ -1,52 +1,62 @@
 #include<iostream>
+#include<algorithm>
 
-int CharsToInt(unsigned char* char_bytes);
+int CharsToInt(unsigned char* charBytes);
 unsigned char* IntToChars(int number);
-void testIntAndCharsConverter(int number);
+void testIntAndCharsConverter(double number);
+double CharsToDouble(unsigned char* charBytes);
+unsigned char* DoubleToChars(double number);
 
 int main(int args, char **argv)
 {
 //참고: https://stackoverflow.com/questions/3784263/converting-an-int-into-a-4-byte-char-array-c
 
-    if (args != 2){
-        printf("error: arguments must be 2\n");
-        return 1;
-    }
+    // if (args != 2){
+    //     printf("error: arguments must be 2\n");
+    //     return 1;
+    // } 
     
-    int number = atoi(argv[1]);
-    testIntAndCharsConverter(number);
-
+    int a = 1452345;
+    int *ptr;
+    ptr = reinterpret_cast<int*> (a);
+    // printf("%d, %d\n", a, *ptr);
+    // printf("%d, %d\n", &a, ptr);
+    
 
     return 0;
 }
 
 void testIntAndCharsConverter(int number)
 {
-    unsigned char* chars;
-    chars = IntToChars(number);
-    int result = CharsToInt(chars);
+    int num1 = 255;
+    unsigned char* byteArray = reinterpret_cast<unsigned char*>(&num1);
+    int final1 = *reinterpret_cast<int*>(byteArray);
 
-
-    printf("before: %d , after: %d \n", number, result);
+    
+    printf("before= %d, after = %d \n",num1,final1);
 }
+
+
+unsigned char* DoubleToChars(double number)
+{
+    unsigned char* charBytes = reinterpret_cast<unsigned char*>(&number);
+    return charBytes;
+}
+
+double CharsToDouble(unsigned char* charBytes)
+{
+    double result = *reinterpret_cast<double*>(charBytes);
+    return result;
+}
+
 unsigned char* IntToChars(int number)
 {
-    unsigned char* char_bytes;
-
-    char_bytes[0] =(number>> 24) & 0xFF;
-    char_bytes[1]=(number>> 16) & 0xFF;
-    char_bytes[2]=(number>> 8) & 0xFF;
-    char_bytes[3]=number& 0xFF;
-    
-    return char_bytes;
+    unsigned char* charBytes = reinterpret_cast<unsigned char*>(&number);
+    return charBytes;
 }
 
-int CharsToInt(unsigned char* char_bytes)
+int CharsToInt(unsigned char* charBytes)
 {
-    int result;
-    result  = int((unsigned char)(char_bytes[0]) << 24 |
-            (unsigned char)(char_bytes[1]) << 16 |
-            (unsigned char)(char_bytes[2]) << 8 |
-            (unsigned char)(char_bytes[3]));
+    int result = *reinterpret_cast<int*>(charBytes);
     return result;
 }
