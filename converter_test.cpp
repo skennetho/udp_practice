@@ -217,7 +217,13 @@ void testIntAndCharsConverter()
 
 int main(void)
 {
-    test();
+    char d[2]= {'a','b'};
+    char* data= d;
+    const char* c_data = data;
+    cout <<d<<endl;
+    cout <<data<<endl;
+    cout <<c_data<<endl;
+
     
     return 0;
 }
