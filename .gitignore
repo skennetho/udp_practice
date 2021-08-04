@@ -1,3 +1,4 @@
 ## ignore files for udp_practice ##
 
 *.exe
+*.out
