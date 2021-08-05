@@ -11,6 +11,7 @@
 # include <sys/socket.h>    //주소변환 기능을 사용할 경우
 # include <arpa/inet.h>     //Name Resolution을 사용할 경우
 #include "DronePacket.h"
+#include "converter.h"
 
 #define PORT 9999
 
@@ -56,15 +57,29 @@ int main(int argc, char *argv[])
 
     recv_buffer[recv_len] = '\0';
 
-    //DronePacket test
+    // /*DronePacket test//////////////////////////////
     DronePacket drone;
+    
+    char buffer[4];
+    for(int i =0 ;i<4;i++){
+        buffer[i] = recv_buffer[i];
+    }
+    int length= *reinterpret_cast<int*>(buffer);
+    char data[length];
+    cout<<']'<<endl;
+    
     drone.deserialize(recv_buffer);
     drone.printData();
+    /////////////////////////////////////*/
 
     printf("ip: %s\n", inet_ntoa(client_addr.sin_addr));
-    printf("received data : %s\n", recv_buffer);
+    cout<<"recv_buffer= [ ";
+    for(int i =0 ;i<recv_len;i++){
+        cout<<"'"<<(int)recv_buffer[i]<<"', ";
+    }
+    cout<<']'<<endl;
 
-    sendto(sock, recv_buffer, strlen(recv_buffer), 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
+    sendto(sock, recv_buffer, recv_len, 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
 
     close(sock);
 

@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "DronePacket.h"
+#include "converter.h"
  
 #define PORT 9999
 
@@ -16,25 +17,31 @@ int main(void){
     int recv_len;
     int addr_len;
 
-    //DronePacket Data test
-   
+    // /*DronePacket Data test ////////////////////////////////////
     DronePacket drone;
-    vector<int> arr = {10};
+    vector<int> arr = {10,20,30};
     drone.setEmpty(arr);
-    drone.setCompanyID("AWE-SOME");
-    drone.setDroneID("DRONE001");
+    drone.setCompanyID("AWE-asdf");
+    drone.setDroneID("asdfasf");
     drone.setLatitudeLongitudeAltitude(37.466142,126.434131,123.4);
     drone.setStateMissionTypeMissionDetail(0,1,2);
     drone.setTimeStamp("12.34.56.789");
     drone.calcSize();
 
-    char* data;
+    char data[drone.getSize()];
     drone.serialize(data);
     drone.printData();
+    cout<<"data= [ ";
+    for(int i =0 ;i<drone.getSize();i++){
+        cout<<"'"<<(int)data[i]<<"', ";
+    }
+    cout<<']'<<endl;
+    DronePacket drone2;
+    drone2.deserialize(data);
+    drone2.printData();
+
     cout<<"ready..."<<endl; 
-    //const char *msg = "hello awesometech!";     
-    const char *msg = data;
-    cout<<msg<<endl;
+    //////////////////////////////////////////////////////////*/
 
     if((sock = socket(AF_INET , SOCK_DGRAM, 0))<0){
         perror("socket");
@@ -48,7 +55,7 @@ int main(void){
 
     addr_len = sizeof(target_addr);
 
-    sendto(sock, msg, strlen(msg), 0 , (struct sockaddr*)&target_addr, addr_len);                                   
+    sendto(sock, data, drone.getSize(), 0 , (struct sockaddr*)&target_addr, addr_len);                                   
 
     if((recv_len = recvfrom(sock, recv_buffer, 1024, 0, (struct sockaddr *)&target_addr,  (socklen_t*)&addr_len)) < 0){
         perror("recvfrom ");
@@ -58,7 +65,12 @@ int main(void){
     recv_buffer[recv_len] = '\0';
 
     printf("ip : %s \n", inet_ntoa(target_addr.sin_addr));
-    printf("received data %s \n", recv_buffer);
+
+    cout<<"recv_buffer= [ ";
+    for(int i =0 ;i<recv_len;i++){
+        cout<<"'"<<(int)recv_buffer[i]<<"', ";
+    }
+    cout<<']'<<endl;
 
     close(sock);
 

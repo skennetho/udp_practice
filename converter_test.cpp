@@ -5,8 +5,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "DronePacket.h"
 #include "Serializer.h"
+#include "DronePacket.h"
 using namespace std;
 
 //참고: https://stackoverflow.com/questions/3784263/converting-an-int-into-a-4-byte-char-array-c
@@ -215,15 +215,37 @@ void testIntAndCharsConverter()
     return;
 }
 
+void makeArray(char data[]){
+    char arr[4] = {'w','h','a','t'};
+    data = arr;
+}
+void printArray(char data[]){
+    cout<<"data in printArray()= [ ";
+    for(int i =0 ;i<4;i++){
+        cout<<(int)data[i]<<" ";
+    }
+    cout<<']'<<endl;
+}
+void test_function_pointerArray()
+{
+    char* data;
+    makeArray(data);
+    cout<<"data in test()= [ ";
+    for(int i =0 ;i<4;i++){
+        cout<<(int)data[i]<<" ";
+    }
+    cout<<']'<<endl;
+    printArray(data);
+}
 int main(void)
 {
-    char d[2]= {'a','b'};
-    char* data= d;
-    const char* c_data = data;
-    cout <<d<<endl;
-    cout <<data<<endl;
-    cout <<c_data<<endl;
+    // char d[2]= {'a','b'};
+    // char* data= d;
+    // const char* c_data = data;
+    // cout <<d<<endl;
+    // cout <<data<<endl;
+    // cout <<c_data<<endl;
 
-    
+    test_function_pointerArray();    
     return 0;
 }
