@@ -31,7 +31,7 @@ int main(void){
     char* data;
     drone.serialize(data);
     drone.printData();
-    cout<<"ready..."<<endl;
+    cout<<"ready..."<<endl; 
     //const char *msg = "hello awesometech!";     
     const char *msg = data;
     cout<<msg<<endl;
