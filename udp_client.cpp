@@ -7,8 +7,9 @@
 #include <arpa/inet.h>
 #include "DronePacket.h"
 #include "converter.h"
+#include "unistd.h"
  
-#define PORT 9999
+#define PORT 3333
 
 int main(void){
     int sock;
@@ -21,8 +22,8 @@ int main(void){
     DronePacket drone;
     vector<int> arr = {10,20,30};
     drone.setEmpty(arr);
-    drone.setCompanyID("AWE-asdf");
-    drone.setDroneID("asdfasf");
+    drone.setCompanyID("AWE-SOME");
+    drone.setDroneID("drone123");
     drone.setLatitudeLongitudeAltitude(37.466142,126.434131,123.4);
     drone.setStateMissionTypeMissionDetail(0,1,2);
     drone.setTimeStamp("12.34.56.789");
@@ -30,15 +31,15 @@ int main(void){
 
     char data[drone.getSize()];
     drone.serialize(data);
-    drone.printData();
-    cout<<"data= [ ";
-    for(int i =0 ;i<drone.getSize();i++){
-        cout<<"'"<<(int)data[i]<<"', ";
-    }
-    cout<<']'<<endl;
+    // drone.printData();
+    // cout<<"data= [ ";
+    // for(int i =0 ;i<drone.getSize();i++){
+    //     cout<<"'"<<(int)data[i]<<"', ";
+    // }
+    // cout<<']'<<endl;
     DronePacket drone2;
     drone2.deserialize(data);
-    drone2.printData();
+    // drone2.printData();
 
     cout<<"ready..."<<endl; 
     //////////////////////////////////////////////////////////*/
@@ -47,13 +48,22 @@ int main(void){
         perror("socket");
         return 1;
     }
+    cout<<"socket..."<<endl; 
+
 
     memset(&target_addr, 0x00, sizeof(target_addr));
     target_addr.sin_family = AF_INET;
-    target_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    target_addr.sin_port = htons(PORT);
+    target_addr.sin_addr.s_addr = inet_addr("192.168.0.40");                   //IP
+    target_addr.sin_port = htons(PORT);                                     //PORT
 
     addr_len = sizeof(target_addr);
+    //////////////////////////////////////////////1초마다 
+    for(int i =0 ; i< 30; i++){
+        sendto(sock, data, drone.getSize(), 0 , (struct sockaddr*)&target_addr, addr_len);
+        cout<<"sending drone packet..."<<endl; 
+
+        sleep(1);
+    }
 
     sendto(sock, data, drone.getSize(), 0 , (struct sockaddr*)&target_addr, addr_len);                                   
 
@@ -66,11 +76,11 @@ int main(void){
 
     printf("ip : %s \n", inet_ntoa(target_addr.sin_addr));
 
-    cout<<"recv_buffer= [ ";
-    for(int i =0 ;i<recv_len;i++){
-        cout<<"'"<<(int)recv_buffer[i]<<"', ";
-    }
-    cout<<']'<<endl;
+    // cout<<"recv_buffer= [ ";
+    // for(int i =0 ;i<recv_len;i++){
+    //     cout<<"'"<<(int)recv_buffer[i]<<"', ";
+    // }
+    // cout<<']'<<endl;
 
     close(sock);
 

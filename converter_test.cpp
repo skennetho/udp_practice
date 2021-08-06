@@ -5,8 +5,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "Serializer.h"
 #include "DronePacket.h"
+
+
 using namespace std;
 
 //참고: https://stackoverflow.com/questions/3784263/converting-an-int-into-a-4-byte-char-array-c
@@ -151,68 +152,18 @@ void test()
     //drone.printData();
 
     int length = drone.getSize();
-    cout<<length<< endl;
+    cout<<"drone packet's length ="<<length<< endl;
 
     char data[length];
     drone.serialize(data);
 
+
+    cout<<":::drone2 printing..."<<endl;
     DronePacket drone2;
     drone2.deserialize(data);
     drone2.printData();
 
    
-}
-
-inline unsigned char *DoubleToChars(double number)
-{
-    unsigned char* charBytes = reinterpret_cast<unsigned char*>(&number);
-    return &charBytes[0];
-}
-
-inline double CharsToDouble(unsigned char* charBytes)
-{
-    double result = *reinterpret_cast<double*>(charBytes);
-    return result;
-}
-
-inline unsigned char* IntToChars(int number)
-{
-    unsigned char* charBytes = reinterpret_cast<unsigned char*>(&number);
-    return charBytes;
-}
-
-inline int CharsToInt(unsigned char* charBytes)
-{
-    int result = *reinterpret_cast<int*>(charBytes);
-    return result;
-}
-
-void testIntAndCharsConverter()
-{
-
-    // char* str = "AWESOME ";
-    // unsigned char* bytes =CharsToUnsignedChars(str);
-    // char* result = UnsignedCharsToChars(bytes);
-
-    // printf("%s \n", str);
-    // printf("%s \n", result);
-
-    int int1 = 231;
-    unsigned char* bytes1 =IntToChars(int1);
-    int result1 = CharsToInt(bytes1);
-    printf("before= %d, after = %d \n",int1,result1);
-
-    double double1 = 16.123456;
-    unsigned char* bytes2 =DoubleToChars(double1);
-    double result2 = CharsToDouble(bytes2);
-    printf("before= %lf, after = %lf \n",double1,result2);
-    
-    int num1 = 255;
-    unsigned char* byteArray = reinterpret_cast<unsigned char*>(&num1);
-    int final1 = *reinterpret_cast<int*>((char*)byteArray);
-    
-    printf("before= %d, after = %d \n",num1,final1);
-    return;
 }
 
 void makeArray(char data[]){
@@ -237,15 +188,9 @@ void test_function_pointerArray()
     cout<<']'<<endl;
     printArray(data);
 }
+
 int main(void)
 {
-    // char d[2]= {'a','b'};
-    // char* data= d;
-    // const char* c_data = data;
-    // cout <<d<<endl;
-    // cout <<data<<endl;
-    // cout <<c_data<<endl;
-
-    test_function_pointerArray();    
+    test();
     return 0;
 }

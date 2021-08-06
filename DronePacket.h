@@ -221,7 +221,12 @@ public:
                 data[index++] = byte[j];
             } 
         }
-        da = reinterpret_cast<char*>(data);
+
+        char* temp = reinterpret_cast<char*>(data);                                     //깊은복사
+        for(int i =0 ; i< length ; i++){
+            da[i] = temp[i];
+        }
+        deserialize(da);
     }
     //deserialize
     void deserialize(char* da){
@@ -279,7 +284,7 @@ public:
         mission_detail = *reinterpret_cast<int*>(bufferInt);
 
         empty.clear();                                                              //empty
-        for(;index<length;){
+        for(;index+4<length;){
             for(int i =0; i<4; i++){
                 bufferInt[i] = data[index++];
             }
